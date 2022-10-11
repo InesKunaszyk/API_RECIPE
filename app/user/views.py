@@ -23,13 +23,8 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
     """Manage autnticated user"""
     serializer_class = UserSerializer
     authentication_class = [authentication.TokenAuthentication]
-    permission_classes =[permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         """Retrieve and return the authenticated user"""
         return self.request.user
-
-#     new class -  retrieveUpdateAPIView - class recomended for provide retrieving and updateing objects in db
-# the same serializer in the user View
-# auth classes  - type fof authentication
-# permissions class es = zapewnienie o tym ze user API jest autenticated
