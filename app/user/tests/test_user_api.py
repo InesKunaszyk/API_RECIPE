@@ -111,11 +111,11 @@ class PublicUserAPITest(TestCase):
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def retrieve_user_unauthorized(self):
-        """Test authentications is required for users"""
-        result = self.client.get(ME_URL)
-
-        self.assertEqual(result.status_code, status.HTTP_401_UNAUTHORIZED)
+    # def test_retrieve_user_unauthorized(self):
+    #     """Test authentications is required for users"""
+    #     result = self.client.get(ME_URL)
+    #
+    #     self.assertEqual(result.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class PrivateUserAPITest(TestCase):
