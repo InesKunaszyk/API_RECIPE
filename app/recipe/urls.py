@@ -14,6 +14,7 @@ router = DefaultRouter()
 router.register('recipes', views.RecipeViewSet)
 # assign of all the deifferent edpoints from our RECIPE VIEW set to that endpoint
 # - > Recipe view has auto generated URL, which depends on functionality in viewset
+router.register('tags', views.TagViewSet)
 
 app_name = "recipe"
 
