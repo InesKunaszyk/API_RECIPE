@@ -4,6 +4,9 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.test import TestCase
 
+from rest_framework import status
+from rest_framework.test import APIClient
+
 from core.models import Tag
 
 from recipe.serializers import TagSerializer
@@ -35,18 +38,18 @@ class PrivateTagsApiTest(TestCase):
     def steUp(self):
         self.user = create_user()
         self.client = APIClient()
-        self.client.force_authentication(self.user)
+        self.client.force_authenticate(self.user)
 
     def test_retrieve_tags(self):
         """test retrieving a list of tags"""
         Tag.objects.create(user=self.user, name="Dessert")
         Tag.objects.create(user=self.user, name="Milk")
 
-        result = self.client(TAGS_URL)
+        result = self.client.get(TAGS_URL)
 
         tags = Tag.objects.all().order_by('-id')
         serializer = TagSerializer(tags, many=True)
-        self.assertEqual(result.status_coe, status.HTTP_200_OK)
+        self.assertEqual(result.status_code, status.HTTP_200_OK)
         self.assertEqual(result.data, serializer.data)
 
     def test_tags_limited_to_user(self):
