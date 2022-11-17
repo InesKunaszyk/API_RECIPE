@@ -10,8 +10,8 @@ from user.serializers import (
     AuthTokenSerializer,
 )
 
-serializer_class = AuthTokenSerializer
-renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+# serializer_class = AuthTokenSerializer
+# renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -28,8 +28,8 @@ class CreateTokenView(ObtainAuthToken):
 class ManageUserView(generics.RetrieveUpdateAPIView):
     """Manage autnticated user"""
     serializer_class = UserSerializer
-    authentication_class = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    authentication_class = [authentication.TokenAuthentication, ]
+    permission_classes = [permissions.IsAuthenticated, ]
 
     def get_object(self):
         """Retrieve and return the authenticated user"""

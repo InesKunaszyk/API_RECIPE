@@ -37,6 +37,11 @@ def create_recipe(user, **kwargs):
     return recipe
 
 
+def create_user(**kwargs):
+    """Create a new user"""
+    return get_user_model().objects.create_user(**kwargs)
+
+
 def detail_recipe(recipe_id):
     """"Create and return a recipe detail URL"""
     return reverse("recipe:recipe-detail", args=[recipe_id])
@@ -65,6 +70,7 @@ class PrivateRecipeAPITest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
+        self.user = create_user(email='user@example.com', password='password123456')
         self.user = get_user_model().objects.create_user(
             'testuser@test.com',
             'testpassword123',
@@ -87,9 +93,9 @@ class PrivateRecipeAPITest(TestCase):
 
     def test_recipe_list_limited_to_user(self):
         """test list of  recipes is limited to authenticated user"""
-        user2 = get_user_model().objects.create_user(
-            'user2@example.com',
-            'testpassword1234'
+        user2 = create_user(
+            email='user2@example.com',
+            password='testpassword1234'
         )
         create_recipe(user=user2)
         create_recipe(user=self.user)
@@ -198,3 +204,14 @@ class PrivateRecipeAPITest(TestCase):
 
         self.assertEqual(result.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Recipe.objects.filter(id=recipe.id).exists())
+
+    def test_recipe_other_users_recipe_error(self):
+        """test trying to delete another users  recipe -  gives ERROR"""
+        new_user = create_user(email='user2@user2.pl', password='0987654321')
+        recipe = create_recipe(user=new_user)
+
+        url = detail_recipe(recipe.id)
+        result = self.client.delete(url)
+
+        self.assertEqual(result.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertTrue(Recipe.objects.filter(id=recipe.id).exists())
