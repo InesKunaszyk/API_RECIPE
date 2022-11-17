@@ -47,11 +47,6 @@ def detail_recipe(recipe_id):
     return reverse("recipe:recipe-detail", args=[recipe_id])
 
 
-def create_user(**params):
-    """Create and return a new user."""
-    return get_user_model().objects.create_user(**params)
-
-
 class PublicRecipeAPITest(TestCase):
     """Test autheticated API requst"""
 
