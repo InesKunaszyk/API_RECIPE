@@ -23,6 +23,13 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'time_minutes', 'price', 'link', 'tags']
         read_only_fields = ['id']
 
+
+class RecipeDetailSerializer(RecipeSerializer):
+    """Serializers for view with recipe detail"""
+
+    class Meta(RecipeSerializer.Meta):
+        fields = RecipeSerializer.Meta.fields + ['description']
+
     def create(self, validated_data):
         tags = validated_data.pop('tags', [])
         recipe = Recipe.objects.create(**validated_data)
@@ -35,10 +42,3 @@ class RecipeSerializer(serializers.ModelSerializer):
             recipe.tags.add(tag_obj)
 
         return recipe
-
-
-class RecipeDetailSerializer(RecipeSerializer):
-    """Serializers for view with recipe detail"""
-
-    class Meta(RecipeSerializer.Meta):
-        fields = RecipeSerializer.Meta.fields + ['description']
