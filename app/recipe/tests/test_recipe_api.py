@@ -428,8 +428,7 @@ class ImageUploadTest(TestCase):
             img.save(image_file, format='JPEG')
             image_file.seek(0)
             payload = {'image': image_file}
-            result = self.client.post(url, payload, format='json')
-
+            result = self.client.post(url, payload, format='multipart')
             self.recipe.refresh_from_db()
             self.assertEqual(result.status_code, status.HTTP_200_OK)
             self.assertIn('image', result.data)
@@ -439,6 +438,6 @@ class ImageUploadTest(TestCase):
         """Test uploading invalid image"""
         url = image_upload_url(self.recipe.id)
         payload = {'image': 'notanimage'}
-        result = self.client.post(url, payload, format='json')
+        result = self.client.post(url, payload, format='multipart')
 
         self.assertEqual(result.status_code, status.HTTP_400_BAD_REQUEST)
