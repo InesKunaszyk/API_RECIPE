@@ -76,7 +76,6 @@ class PrivateTagsApiTest(TestCase):
 
         payload = {'name': 'Fruits'}
         url = detail_url(tag.id)
-
         result = self.client.patch(url, payload)
 
         self.assertEqual(result.status_code, status.HTTP_200_OK)
@@ -86,9 +85,7 @@ class PrivateTagsApiTest(TestCase):
     def test_delete_tag(self):
         """test fr delete a tag"""
         tag = Tag.objects.create(user=self.user, name='Cocoa')
-
         url = detail_url(tag.id)
-
         result = self.client.delete(url)
 
         self.assertEqual(result.status_code, status.HTTP_204_NO_CONTENT)
