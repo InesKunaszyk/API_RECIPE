@@ -303,7 +303,6 @@ class PrivateRecipeAPITest(TestCase):
         self.assertEqual(result.status_code, status.HTTP_200_OK)
         self.assertEqual(recipe.tags.count(), 0)
 
-
     def test_create_new_recipe_with_new_ingredients(self):
         """"Tests creating and return a recipe with new ingredients"""
         payload = {
@@ -330,7 +329,7 @@ class PrivateRecipeAPITest(TestCase):
                 user=self.user,
             ).exists()
             self.assertTrue(exists)
-    #
+
     def test_create_recipe_with_existing_ingredient(self):
         ingredient = Ingredient.objects.create(user=self.user, name='sugar')
         payload = {
