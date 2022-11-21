@@ -434,9 +434,9 @@ class PrivateRecipeAPITest(TestCase):
         recipe1.ingredients.add(ingredient1)
         recipe2.ingredients.add(ingredient2)
 
-        recipe3 = create_recipe(user=self.user, name='brownie')
+        recipe3 = create_recipe(user=self.user, title='brownie')
         params = {'ingredients': f'{ingredient1.id}, {ingredient2.id}'}
-        result = self.client(RECIPES_URL, params)
+        result = self.client.get(RECIPES_URL, params)
 
         s1 = RecipeSerializer(recipe1)
         s2 = RecipeSerializer(recipe2)
