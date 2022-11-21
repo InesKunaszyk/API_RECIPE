@@ -404,6 +404,48 @@ class PrivateRecipeAPITest(TestCase):
         self.assertEqual(result.status_code, status.HTTP_200_OK)
         self.assertEqual(recipe.ingredients.count(), 0)
 
+    def test_filter_by_tags(self):
+        """Test filtering recipes by tags"""
+        recipe1 = create_recipe(user=self.user, title="Brownie with cherries")
+        recipe2 = create_recipe(user=self.user, title="Ramen soup with egg and sweet potato")
+        tag1 = Tag.objects.create(user=self.user, name='fruit')
+        tag2 = Tag.objects.create(user=self.user, name='vegan')
+
+        recipe1.tags.add(tag1)
+        recipe2.tags.add(tag2)
+        recipe3 = create_recipe(user=self.user, title='Fish and chips')
+
+        params = {'tags': f'{tag1.id}, {tag2.id}'}
+        result = self.client.get(RECIPES_URL, params)
+
+        s1 = RecipeSerializer(recipe1)
+        s2 = RecipeSerializer(recipe2)
+        s3 = RecipeSerializer(recipe3)
+        self.assertIn(s1.data, result.data)
+        self.assertIn(s2.data, result.data)
+        self.assertNotIn(s3.data, result.data)
+
+    def test_filter_by_ingredients(self):
+        """Filtering recipes by ingredient"""
+        recipe1 = create_recipe(user=self.user, title="Fish and chips")
+        recipe2 = create_recipe(user=self.user, title="Chicken soup")
+        ingredient1 = Ingredient.objects.create(user=self.user, name='fish')
+        ingredient2 = Ingredient.objects.create(user=self.user, name='chicken')
+        recipe1.ingredients.add(ingredient1)
+        recipe2.ingredients.add(ingredient2)
+
+        recipe3 = create_recipe(user=self.user, name='brownie')
+        params = {'ingredients': f'{ingredient1.id}, {ingredient2.id}'}
+        result = self.client(RECIPES_URL, params)
+
+        s1 = RecipeSerializer(recipe1)
+        s2 = RecipeSerializer(recipe2)
+        s3 = RecipeSerializer(recipe3)
+
+        self.assertIn(s1.data, result.data)
+        self.assertIn(s2.data, result.data)
+        self.assertNotIn(s3.data, result.data)
+
 
 class ImageUploadTest(TestCase):
     """Tests for IMAGE uplaod in API"""
