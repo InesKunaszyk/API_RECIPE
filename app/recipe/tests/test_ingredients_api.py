@@ -98,7 +98,7 @@ class PrivateIngredientsApiTests(TestCase):
     def test_filter_ingredients_assigned_to_recipes(self):
         ingredient1 = Ingredient.objects.create(user=self.user, name='Apple')
         ingredient2 = Ingredient.objects.create(user=self.user, name='Orange')
-        recipe1 = Recipe.objects.create(title = 'Apple Pie', time_minutes=5, price=Decimal('15'), user=self.user)
+        recipe1 = Recipe.objects.create(title='Apple Pie', time_minutes=5, price=Decimal('15'), user=self.user)
 
         recipe1.ingredients.add(ingredient1)
 
