@@ -20,6 +20,7 @@ services:
       - DB_NAME=api_recipe_db
       - DB_USER=ines
       - DB_PASS=1234567
+      - DEBUG=1
     depends_on:
       - db
 
